@@ -1,0 +1,15 @@
+services:
+    exs_feeds_cambuilder.memcached:
+        class: '\Memcached'
+        calls:
+            - ['addServer', ['%exs_feeds_cambuilder.memcached_host%', '%exs_feeds_cambuilder.memcached_port%']]
+
+    exs_feeds_cambuilder.memcached.http_client:
+        class: 'GuzzleHttp\Client'
+
+    exs_feeds_cambuilder.feeds_reader:
+        class: 'EXS\FeedsCambuilderBundle\Service\FeedsReader'
+        arguments:
+            - '@exs_feeds_cambuilder.memcached'
+            - '@exs_feeds_cambuilder.memcached.http_client'
+            - '%exs_feeds_cambuilder.cache_ttl%'
