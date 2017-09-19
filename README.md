@@ -1,6 +1,33 @@
 # EXS-FeedsCambuilderBundle
 
+## Install
+
+Require the bundle from packagist
+```
+$ composer require exs/feeds-cambuilder-bundle
+```
+
+Enable the bundle in AppKernel
+```php
+<?php
+...
+class AppKernel extends Kernel
+{
+    ...
+    public function registerBundles()
+    {
+        $bundles = array(
+            ...
+            new EXS\FeedsCambuilderBundle\EXSFeedsCambuilderBundle(),
+        );
+    }
+    ...
+}
+```
+
 ## Config
+
+Some configuration is avaible to manage the cache.
 
 ```yml
 # Default values
