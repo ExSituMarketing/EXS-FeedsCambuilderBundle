@@ -15,6 +15,7 @@
     ],
     "require": {
         "php": "~5.5|~7.0",
+        "ext-memcached": "*",
         "symfony/framework-bundle": "~2.8|~3.0",
         "guzzlehttp/guzzle": "~6.3"
     },
