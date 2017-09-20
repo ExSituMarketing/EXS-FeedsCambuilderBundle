@@ -21,6 +21,7 @@ env:
     - SYMFONY_VERSION=3.3.*
 
 before_install:
+    - yum install cyrus-sasl-devel
     - pecl install memcached-2.2.0
     - composer self-update
     - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
