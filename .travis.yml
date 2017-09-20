@@ -25,7 +25,7 @@ before_install:
     - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
 
 install:
-    - composer install --prefer-dist --prefer-stable --no-interaction
+    - composer install --prefer-dist --no-interaction
 
 script:
     - bin/phpunit -c . --coverage-text
