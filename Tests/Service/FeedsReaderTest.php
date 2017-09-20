@@ -44,7 +44,7 @@ XML;
 </SMLResult>
 XML;
 
-    public function testGetPerformers()
+    public function testGetLivePerformers()
     {
         $memcached = $this->prophesize(\Memcached::class);
         $memcached->get('CamBuilder100LiveIds')->willReturn(false)->shouldBeCalledTimes(1);
@@ -61,7 +61,7 @@ XML;
         $httpClient->post('http://affiliate.streamate.com/SMLive/SMLResult.xml', [
             'headers' => ['Content-Type' => 'text/xml'],
             'body' => $this->queryXml,
-            'timeout' => 5.0,
+            'timeout' => 10.0,
             'http_errors' => false,
         ])->willReturn($response)->shouldBeCalledTimes(1);
 
@@ -70,6 +70,26 @@ XML;
         $result = $reader->getLivePerformers();
 
         $this->assertCount(10, $result);
+    }
 
+    public function testGetLivePerformersWhenAnExceptionOccurs()
+    {
+        $memcached = $this->prophesize(\Memcached::class);
+        $memcached->get('CamBuilder100LiveIds')->willReturn(false)->shouldBeCalledTimes(1);
+        $memcached->set('CamBuilder100LiveIds', [], 120)->shouldBeCalledTimes(1);
+
+        $httpClient = $this->prophesize(Client::class);
+        $httpClient->post('http://affiliate.streamate.com/SMLive/SMLResult.xml', [
+            'headers' => ['Content-Type' => 'text/xml'],
+            'body' => $this->queryXml,
+            'timeout' => 10.0,
+            'http_errors' => false,
+        ])->willThrow(new \RuntimeException("It's a trap!"))->shouldBeCalledTimes(1);
+
+        $reader = new FeedsReader($memcached->reveal(), $httpClient->reveal());
+
+        $result = $reader->getLivePerformers();
+
+        $this->assertEmpty($result);
     }
 }

@@ -68,7 +68,7 @@ class FeedsReader
      */
     private function refreshLivePerformers($limit)
     {
-        $performerIds = [];
+        $performers = [];
 
         $body = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -83,24 +83,28 @@ class FeedsReader
 </SMLQuery>
 XML;
 
-        $response = $this->httpClient->post('http://affiliate.streamate.com/SMLive/SMLResult.xml', [
-            'headers' => ['Content-Type' => 'text/xml'],
-            'body' => str_replace('{limit}', (int)$limit, $body),
-            'timeout' => 5.0,
-            'http_errors' => false,
-        ]);
+        try {
+            $response = $this->httpClient->post('http://affiliate.streamate.com/SMLive/SMLResult.xml', [
+                'headers' => ['Content-Type' => 'text/xml'],
+                'body' => str_replace('{limit}', (int)$limit, $body),
+                'timeout' => 10.0,
+                'http_errors' => false,
+            ]);
 
-        if (200 === $response->getStatusCode()) {
-            $responseContent = $response->getBody()->getContents();
+            if (200 === $response->getStatusCode()) {
+                $responseContent = $response->getBody()->getContents();
 
-            $content = new \SimpleXMLElement($responseContent);
+                $content = new \SimpleXMLElement($responseContent);
 
-            foreach ($content->xpath('AvailablePerformers/Performer') as $performer) {
-                $performerIds[] = (string)$performer['Id'];
+                foreach ($content->xpath('AvailablePerformers/Performer') as $performer) {
+                    $performers[] = (string)$performer['Id'];
+                }
             }
+        } catch (\Exception $e) {
+            $performers = [];
         }
 
-        return $performerIds;
+        return $performers;
     }
 
     /**
