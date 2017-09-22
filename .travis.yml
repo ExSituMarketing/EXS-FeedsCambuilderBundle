@@ -18,6 +18,7 @@ env:
     - SYMFONY_VERSION=3.3.*
 
 before_install:
+    - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - composer self-update
     - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
 
