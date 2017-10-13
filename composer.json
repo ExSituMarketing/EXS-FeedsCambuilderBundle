@@ -3,7 +3,7 @@
     "type": "symfony-bundle",
     "description": "This bundle reads CamBuilder's api to get live performers' Ids.",
     "keywords": ["Symfony2", "bundle"],
-    "homepage": "https://github.com/ExSituMarketing/EXS-Feeds-Cambuilder",
+    "homepage": "https://github.com/ExSituMarketing/EXS-FeedsCambuilderBundle",
     "license": "MIT",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -14,10 +14,11 @@
         }
     ],
     "require": {
-        "php": "~5.5|~7.0",
+        "php": "~5.6|~7.0",
         "ext-memcached": "*",
         "cache/memcached-adapter": "~1.0",
-        "symfony/framework-bundle": "~2.8|~3.0",
+        "symfony/framework-bundle": "~2.8|~3.3",
+        "symfony/console": "~2.8|~3.3",
         "guzzlehttp/guzzle": "~6.3"
     },
     "require-dev": {

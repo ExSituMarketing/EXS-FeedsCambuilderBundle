@@ -24,38 +24,36 @@ class FeedsReader
     /**
      * @var int
      */
-    private $cacheTtl;
+    private $defaultTtl;
 
     /**
      * FeedsReader constructor.
      *
      * @param \Memcached $memcached
      * @param Client     $httpClient
-     * @param int        $cacheTtl
+     * @param int        $defaultTtl
      */
-    public function __construct(\Memcached $memcached, Client $httpClient, $cacheTtl = 120)
+    public function __construct(\Memcached $memcached, Client $httpClient, $defaultTtl = 300)
     {
         $this->memcached = $memcached;
         $this->httpClient = $httpClient;
-        $this->cacheTtl = $cacheTtl;
+        $this->defaultTtl = $defaultTtl;
     }
 
     /**
+     * Returns an array of live performer ids.
+     *
      * @param int $limit
      *
      * @return array
      */
     public function getLivePerformers($limit = 100)
     {
-        $cacheKey = $this->getCacheKey($limit);
-
         if (
-            (false === $performers = $this->memcached->get($cacheKey))
+            (false === $performers = $this->memcached->get($this->getCacheKey($limit)))
             || empty($performers)
         ) {
             $performers = $this->refreshLivePerformers($limit);
-
-            $this->memcached->set($cacheKey, $performers, $this->cacheTtl);
         }
 
         return $performers;
@@ -63,10 +61,11 @@ class FeedsReader
 
     /**
      * @param int $limit
+     * @param int $ttl
      *
      * @return array
      */
-    private function refreshLivePerformers($limit)
+    public function refreshLivePerformers($limit = 100, $ttl = null)
     {
         $performers = [];
 
@@ -100,6 +99,8 @@ XML;
                     $performers[] = (string)$performer['Id'];
                 }
             }
+
+            $this->memcached->set($this->getCacheKey($limit), $performers, $ttl ?: $this->defaultTtl);
         } catch (\Exception $e) {
             $performers = [];
         }
@@ -108,6 +109,8 @@ XML;
     }
 
     /**
+     * Requests live performers from AWE api, extracts the performer ids and set the result in cache.
+     *
      * @param int $limit
      *
      * @return string

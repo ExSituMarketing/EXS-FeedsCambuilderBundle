@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('cache_ttl')
-                    ->defaultValue(120)
+                    ->defaultValue(300)
                 ->end()
                 ->scalarNode('memcached_host')
                     ->defaultValue('localhost')

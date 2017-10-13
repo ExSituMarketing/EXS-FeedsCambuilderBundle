@@ -48,7 +48,7 @@ XML;
     {
         $memcached = $this->prophesize(\Memcached::class);
         $memcached->get('CamBuilder100LiveIds')->willReturn(false)->shouldBeCalledTimes(1);
-        $memcached->set('CamBuilder100LiveIds', ['15314113', '5814046', '1883594', '4108253', '4923315', '29324295', '21612488', '35311343', '4173372', '29899905'], 120)->shouldBeCalledTimes(1);
+        $memcached->set('CamBuilder100LiveIds', ['15314113', '5814046', '1883594', '4108253', '4923315', '29324295', '21612488', '35311343', '4173372', '29899905'], 300)->shouldBeCalledTimes(1);
 
         $body = $this->prophesize(StreamInterface::class);
         $body->getContents()->willReturn($this->responseXml)->shouldBeCalledTimes(1);
@@ -76,7 +76,6 @@ XML;
     {
         $memcached = $this->prophesize(\Memcached::class);
         $memcached->get('CamBuilder100LiveIds')->willReturn(false)->shouldBeCalledTimes(1);
-        $memcached->set('CamBuilder100LiveIds', [], 120)->shouldBeCalledTimes(1);
 
         $httpClient = $this->prophesize(Client::class);
         $httpClient->post('http://affiliate.streamate.com/SMLive/SMLResult.xml', [
