@@ -1,5 +1,7 @@
 # EXS-FeedsCambuilderBundle
 
+[![Build Status](https://travis-ci.org/ExSituMarketing/EXS-FeedsCambuilderBundle.svg?branch=master)](https://travis-ci.org/ExSituMarketing/EXS-FeedsCambuilderBundle)
+
 ## Install
 
 Require the bundle from packagist
