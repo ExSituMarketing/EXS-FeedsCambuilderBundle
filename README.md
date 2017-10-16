@@ -2,9 +2,13 @@
 
 [![Build Status](https://travis-ci.org/ExSituMarketing/EXS-FeedsCambuilderBundle.svg?branch=master)](https://travis-ci.org/ExSituMarketing/EXS-FeedsCambuilderBundle)
 
-## Install
+## Installation
 
-Require the bundle from packagist
+This bundle uses [PHP's native Memcached objects](http://php.net/manual/en/class.memcached.php).
+
+**Make sure the memcached module is enabled in your PHP's installation.**
+
+Require the bundle using composer
 ```
 $ composer require exs/feeds-cambuilder-bundle
 ```
@@ -12,24 +16,24 @@ $ composer require exs/feeds-cambuilder-bundle
 Enable the bundle in AppKernel
 ```php
 <?php
-...
+// app/AppKernel.php
+
 class AppKernel extends Kernel
 {
-    ...
+    // ...
     public function registerBundles()
     {
         $bundles = array(
-            ...
+            // ...
             new EXS\FeedsCambuilderBundle\EXSFeedsCambuilderBundle(),
         );
     }
-    ...
 }
 ```
 
-## Config
+## Configuration
 
-Some configuration is avaible to manage the cache.
+Some configuration is available to manage the cache.
 
 ```yml
 # Default values
@@ -55,7 +59,7 @@ $performerIds = $container
 ;
 ```
 
-A command is also available if you want to force refresh the cache.
+A command is also available if you want to force refresh the memcached record.
 
 ```bash
 $ app/console feeds:cambuilder:refresh-live-performers --env=prod --no-debug
